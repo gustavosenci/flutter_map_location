@@ -11,6 +11,7 @@ class MapLocation extends StatefulWidget {
   final Color primaryColor;
   final Function onWillPop;
   final String googleMapKey;
+  final IconData iconPin;
 
   MapLocation({
     @required this.cameraPosition,
@@ -19,7 +20,8 @@ class MapLocation extends StatefulWidget {
     this.onSelect,
     this.primaryColor = Colors.blue,
     this.onWillPop,
-    this.googleMapKey
+    this.googleMapKey,
+    this.iconPin = Icons.person_pin
   });
 
   @override
@@ -57,8 +59,12 @@ class _MapLocationState extends State<MapLocation> {
               _addressSelected = address;
             });
           },
-          onMapCreated: (controller){
+          onMapCreated: (controller) async{
             _googleMapController = controller;
+            Address address = await getLocationByCoordinates(widget.cameraPosition.target.latitude.toString(), widget.cameraPosition.target.longitude.toString(), key: widget.googleMapKey);
+            setState(() {
+              _addressSelected = address;
+            });
           },
           initialCameraPosition: widget.cameraPosition,
           markers: widget.markers,
@@ -330,7 +336,7 @@ class _MapLocationState extends State<MapLocation> {
                     child: Container(
                       width: 50,
                       child: Center(
-                        child: Icon(Icons.person_pin,
+                        child: Icon(widget.iconPin?? Icons.person_pin,
                           size: 35,
                           color: widget.primaryColor,
                         ),

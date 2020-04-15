@@ -18,7 +18,7 @@ Future<Address> getLocationByCoordinates(String lat, String lng, {String key})as
   Dio dio = Dio();
   Response response = await dio.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=$lat,$lng&key=$key");
   Address address = Address();
-
+  print(response.data);
   if (response.statusCode == 200) {
     List components  = response.data["results"][0]["address_components"];
     for(var _address in components){
